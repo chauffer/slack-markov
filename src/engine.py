@@ -17,7 +17,7 @@ def process_message(event):
     # TODO, e.g.
     # msg.user.send_msg(...)
 
-
+# we might not need this
 def process_presence_change(event):
     if event['presence'] == 'active':
         user = User.from_event(event)
