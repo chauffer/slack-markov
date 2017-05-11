@@ -44,6 +44,8 @@ def process_message(event):
         if channel == dest_channel:
             return
 
+    if dest_channel in settings.SLACK_CHANNEL_READONLY: #pro failsafe
+        return 
     slack.send_msg(
         username=input_username,
         channel=dest_channel,
