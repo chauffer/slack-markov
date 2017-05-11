@@ -51,8 +51,7 @@ def get_channels():
     return data['channels']
 
 def get_user_picture(username):
-    user_picture = next(user['profile']['image_192'] for user in get_users_list() if user['name'] == username.lower())
-    return user_picture
+    return next(user['profile']['image_192'] for user in get_users_list() if user['name'] == username.lower())
 
 def get_channel_from_channel_name(channel_name):
     channels = get_channels()
