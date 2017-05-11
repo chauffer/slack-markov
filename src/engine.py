@@ -25,42 +25,61 @@ def process_message(event):
     input_message = str(msg.text)
     input_username = msg.user.login
 
-    channels = find_the_other_channel(channel)
-    print(channels)
-    markov = Markov(channels['original_id'])
+    channels = get_channel_set(channel)
+    is_readonly = is_channel_set_readonly(channel)
+    is_primary = bool(get_primary_channel(channel) == channel)
+    if is_readonly and not is_primary:
+        return
+    markov = Markov(slack.get_channel_from_channel_name(get_primary_channel(channel))['id'])
     markov.learn(input_message)
 
     markov_message = markov.speak(input_message)
     if not markov_message:
-        print('no message...')
         return
+
+    dest_channel = get_other_channel(channel)
+
+    if is_readonly:
+        dest_channel = get_other_channel(get_primary_channel(channel))
+        if channel == dest_channel:
+            return
 
     slack.send_msg(
         username=input_username,
-        channel=channels['other'],
+        channel=dest_channel,
         msg=markov_message,
     )
 
 
-def find_the_other_channel(channel):
-    print(channel)
+def get_primary_channel(channel):
+    channels_fake, channels_original = settings.channels_fake, settings.channels_original
+
+    if channel in channels_fake:
+        return channels_original[channels_fake.index(channel)]
+    if channel in channels_original:
+        return channel
+
+
+def get_other_channel(channel):
     channels_fake, channels_original = settings.channels_fake, settings.channels_original
 
     if channel in channels_fake:
         other_channel = channels_original[channels_fake.index(channel)]
-        channels = {'fake': channel, 'original': other_channel, 'other': other_channel}
-        print("it's fake")
-
     if channel in channels_original:
         other_channel = channels_fake[channels_original.index(channel)]
-        channels = {'original': channel, 'fake': other_channel, 'other': other_channel}
-        print("it's real")
+    return other_channel
 
-    channels['original_id'] = slack.get_channel_from_channel_name(channels['original'])['id']
-    channels['fake_id'] = slack.get_channel_from_channel_name(channels['fake'])['id']
-    channels['other_id'] = slack.get_channel_from_channel_name(channels['other'])['id']
 
-    return channels
+def is_channel_set_readonly(channel):
+    channels = [channel, get_other_channel(channel)]
+    for channel in channels:
+        if channel in settings.SLACK_CHANNEL_READONLY:
+            return True
+    return False
+
+
+def get_channel_set(channel):
+    return [get_primary_channel(channel), get_other_channel(get_primary_channel(channel))]
 
 # we might not need this
 def process_presence_change(event):
