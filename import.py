@@ -1,7 +1,6 @@
 import json
 import os
 from pprint import pprint
-import sys
 
 from src import markov as m
 

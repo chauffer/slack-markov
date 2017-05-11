@@ -25,7 +25,7 @@ def process_message(event):
     input_message = str(msg.text)
     input_username = msg.user.login
 
-    channels = get_channel_set(channel)
+    get_channel_set(channel)
     is_readonly = is_channel_set_readonly(channel)
     is_primary = bool(get_primary_channel(channel) == channel)
     if is_readonly and not is_primary:
@@ -45,7 +45,7 @@ def process_message(event):
             return
 
     if dest_channel in settings.SLACK_CHANNEL_READONLY: #pro failsafe
-        return 
+        return
     slack.send_msg(
         username=input_username,
         channel=dest_channel,
