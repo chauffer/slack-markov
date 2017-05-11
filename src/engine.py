@@ -35,7 +35,7 @@ def process(event):
         process_presence_change(event)
 
     elif event['type'] == 'message':
-        if not event.get('subtype', None):
+        if not event.get('subtype', None): #original message, edits etc have subtypes
             process_message(event)
 
 
