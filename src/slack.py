@@ -4,7 +4,11 @@ from . import settings
 
 
 logger = logging.getLogger(__name__)
-client = SlackClient(settings.SLACK_API_TOKEN)
+
+
+def init():
+    global client
+    client = SlackClient(settings.SLACK_API_TOKEN)
 
 
 def api_call(*args, **kwargs):
