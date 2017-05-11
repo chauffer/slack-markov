@@ -1,6 +1,8 @@
-from cobe.brain import Brain
-import re
 import os
+import re
+
+from cobe.brain import Brain
+
 
 class Markov:
     def __init__(self, brain_id):
@@ -10,7 +12,7 @@ class Markov:
 
         self.brain = Brain(brain_path)
 
-    
+
     def filter(self, message):
         message = re.sub('\<@[A-Z0-9a-z]{9}\>', '', message) # remove mentions
         message = re.sub('\s{2,}', ' ', message) #remove double spaces
@@ -34,4 +36,3 @@ class Markov:
         if not valid:
             return None
         return response
-        

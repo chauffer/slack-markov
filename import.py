@@ -1,8 +1,9 @@
-from src import markov as m
-import os
 import json
-import sys
+import os
 from pprint import pprint
+import sys
+
+from src import markov as m
 
 BRAIN = os.getenv('MARKOV_BRAIN_ID', 'C0SEHHVKQ') # devs-off-topic
 

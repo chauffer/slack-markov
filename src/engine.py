@@ -1,10 +1,9 @@
 import logging
 import time
 
-from . import slack, settings
-from .models import User, Message
-
-from .markov import Markov 
+from . import settings, slack
+from .markov import Markov
+from .models import Message, User
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +50,7 @@ def find_the_other_channel(channel):
         other_channel = channels_original[channels_fake.index(channel)]
         channels = {'fake': channel, 'original': other_channel, 'other': other_channel}
         print("it's fake")
-    
+
     if channel in channels_original:
         other_channel = channels_fake[channels_original.index(channel)]
         channels = {'original': channel, 'fake': other_channel, 'other': other_channel}
@@ -66,8 +65,7 @@ def find_the_other_channel(channel):
 # we might not need this
 def process_presence_change(event):
     if event['presence'] == 'active':
-        user = User.from_event(event)
-        # TODO, e.g.
+        User.from_event(event)
         # user.send_msg(...)
 
 

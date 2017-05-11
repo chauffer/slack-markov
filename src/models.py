@@ -1,4 +1,4 @@
-from . import slack, settings
+from . import settings, slack
 
 
 class SlackAbstract:

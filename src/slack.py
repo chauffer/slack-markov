@@ -1,7 +1,8 @@
 import logging
-from slackclient import SlackClient
-from . import settings
 
+from slackclient import SlackClient
+
+from . import settings
 
 logger = logging.getLogger(__name__)
 
