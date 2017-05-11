@@ -44,15 +44,18 @@ def process_message(event):
 
 
 def find_the_other_channel(channel):
+    print(channel)
     channels_fake, channels_original = settings.channels_fake, settings.channels_original
 
     if channel in channels_fake:
         other_channel = channels_original[channels_fake.index(channel)]
-        channels = {'original': other_channel, 'fake': channel, 'other': other_channel}
+        channels = {'fake': channel, 'original': other_channel, 'other': other_channel}
+        print("it's fake")
     
     if channel in channels_original:
         other_channel = channels_fake[channels_original.index(channel)]
         channels = {'original': channel, 'fake': other_channel, 'other': other_channel}
+        print("it's real")
 
     channels['original_id'] = slack.get_channel_from_channel_name(channels['original'])['id']
     channels['fake_id'] = slack.get_channel_from_channel_name(channels['fake'])['id']
