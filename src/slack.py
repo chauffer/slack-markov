@@ -33,9 +33,11 @@ def send_msg(msg, username, dest=None, user=None, channel=None):
         # don't talk to yourself
         return
 
+    picture = get_user_picture(username)
+
     logger.info('Sending to %s: %s' % (dest, msg))
     return api_call('chat.postMessage', channel=dest, text=str(msg),
-                    username=username, as_user=False)
+                    username=username, as_user=False, icon_url=picture)
 
 
 def add_reaction(emoji, chan_id=None, ts=None, _dest=None):
@@ -45,6 +47,9 @@ def add_reaction(emoji, chan_id=None, ts=None, _dest=None):
                  timestamp=ts)
 
 
+def get_user_picture(username):
+    user_picture = next(user['profile']['image_192'] for user in get_users_list() if user['name'] == username.lower())
+    return user_picture
 
 
 # probably we don't need this
