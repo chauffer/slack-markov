@@ -1,12 +1,9 @@
 import logging
-
 from slackclient import SlackClient
-
 from . import settings
 
 
 logger = logging.getLogger(__name__)
-
 client = SlackClient(settings.SLACK_API_TOKEN)
 
 
@@ -16,16 +13,8 @@ def api_call(*args, **kwargs):
     return res
 
 
-def get_users_list():
-    return api_call('users.list')['members']
-
-
 def get_user_info(user_id):
     return api_call('users.info', user=user_id)['user']
-
-
-def get_channel_info(chan_id):
-    return api_call('channels.info', channel=chan_id)['channel']
 
 
 def send_msg(msg, dest=None, user=None, channel=None):
@@ -52,6 +41,13 @@ def add_reaction(emoji, chan_id=None, ts=None, _dest=None):
                  timestamp=ts)
 
 
+
+
+# probably we don't need this
+def get_users_list():
+    return api_call('users.list')['members']
+def get_channel_info(chan_id):
+    return api_call('channels.info', channel=chan_id)['channel']
 def upload_file(file, title=None, msg=None, channels=None):
     if getattr(file, 'file', None):
         # e.g. type(file) == bot.images.Image
@@ -66,3 +62,4 @@ def upload_file(file, title=None, msg=None, channels=None):
     return api_call('files.upload', file=file,
                     title=title, initial_comment=msg,
                     channels=channels)
+
