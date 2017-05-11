@@ -2,7 +2,7 @@ import logging
 import time
 
 from . import slack, settings
-from .models import User, Message, me
+from .models import User, Message
 
 from .markov import Markov 
 
@@ -12,6 +12,8 @@ logger = logging.getLogger(__name__)
 def process_message(event):
     msg = Message.from_event(event)
     print('1')
+
+    from .models import me
     if msg.user == me:  # ignoring messages coming from me
         return
     print('2')
@@ -22,18 +24,23 @@ def process_message(event):
         return
     print('3')
     input_message = str(msg.text)
+    input_username = msg.user.login
+
     channels = find_the_other_channel(channel)
     print(channels)
     markov = Markov(channels['original_id'])
     markov.learn(input_message)
 
-    message = markov.speak(input_message)
-    print('4')
-    if not message:
+    markov_message = markov.speak(input_message)
+    if not markov_message:
         print('no message...')
         return
 
-    print(message)
+    slack.send_msg(
+        username=input_username,
+        channel=channels['other'],
+        msg=markov_message,
+    )
 
 
 def find_the_other_channel(channel):
@@ -49,6 +56,7 @@ def find_the_other_channel(channel):
 
     channels['original_id'] = slack.get_channel_from_channel_name(channels['original'])['id']
     channels['fake_id'] = slack.get_channel_from_channel_name(channels['fake'])['id']
+    channels['other_id'] = slack.get_channel_from_channel_name(channels['other'])['id']
 
     return channels
 

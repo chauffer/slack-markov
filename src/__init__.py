@@ -5,5 +5,4 @@ def init():
     models.init()
 
 
-if __name__ == 'main':
-    init()
+init()
