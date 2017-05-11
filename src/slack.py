@@ -1,6 +1,7 @@
 import logging
 from slackclient import SlackClient
 from . import settings
+from .models import me
 
 
 logger = logging.getLogger(__name__)
@@ -28,7 +29,6 @@ def send_msg(msg, username, dest=None, user=None, channel=None):
         dest = '#%s' % channel
     assert dest, 'No recipient set.'
 
-    from .models import me
     if dest == me.at:
         # don't talk to yourself
         return
