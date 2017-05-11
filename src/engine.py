@@ -2,6 +2,7 @@ import logging
 import time
 
 from . import slack, settings
+from .models import User, Message, me
 
 
 logger = logging.getLogger(__name__)
@@ -13,9 +14,10 @@ def process_message(event):
     if msg.user == me:
         # ignoring messages coming from me
         return
-    
+
     # TODO, e.g.
     # msg.user.send_msg(...)
+
 
 # we might not need this
 def process_presence_change(event):

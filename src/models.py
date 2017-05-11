@@ -74,15 +74,15 @@ class User(SlackAbstract):
     def name(self):
         return self.first_name or self.login
 
-    @property
-    def image(self):
-        from grab import Grab
-        from .images import Image
+    #@property
+    #def image(self):
+    #    from grab import Grab
+    #    from .images import Image
 
-        g = Grab()
-        resp = g.go(self.image_original)
-        # not saving, because it's probably gonna be edited
-        return Image(resp.body)
+    #    g = Grab()
+    #    resp = g.go(self.image_original)
+    #    # not saving, because it's probably gonna be edited
+    #    return Image(resp.body)
 
     def send_msg(self, msg):
         slack.send_msg(msg, user=self.login)
