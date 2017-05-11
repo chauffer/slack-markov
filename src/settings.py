@@ -2,7 +2,7 @@ import logging.config
 import os
 
 SLACK_API_TOKEN = os.environ['MARKOV_SLACK_API_TOKEN']
-SLACK_BOT_ID = os.getenv('MARKOV_SLACK_BOT_ID', 'B2C3QDCUR')
+SLACK_BOT_ID = os.getenv('MARKOV_SLACK_BOT_ID', 'U2C3DJYAJ')
 
 SLACK_CHANNEL_MAP = os.getenv('MARKOV_SLACK_CHANNEL_MAP', 'devs-off-topic:devs-on-topic').split(',') # "original:fake,original:fake"
 ENGINE_CYCLE_SLEEP = int(os.getenv('MARKOV_ENGINE_CYCLE_SLEEP', '1'))
