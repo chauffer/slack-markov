@@ -1,7 +1,7 @@
 import logging.config
 import os
 
-SLACK_API_TOKEN = os.environ['MARKOV_SLACK_API_TOKEN']
+SLACK_API_TOKEN = os.getenv('MARKOV_SLACK_API_TOKEN', '')
 SLACK_BOT_ID = os.getenv('MARKOV_SLACK_BOT_ID', 'U2C3DJYAJ')
 
 # "original:fake,original:fake"
@@ -9,6 +9,11 @@ SLACK_CHANNEL_MAP = os.getenv('MARKOV_SLACK_CHANNEL_MAP', 'hack-days-markov:hack
 SLACK_CHANNEL_READONLY = os.getenv('MARKOV_SLACK_CHANNEL_READONLY', 'announcements,stand-up').split(',')
 
 ENGINE_CYCLE_SLEEP = float(os.getenv('MARKOV_ENGINE_CYCLE_SLEEP', '0.1'))
+
+SLACK_CHANNELS = [
+    (('stand-up', False), ('stand-down', True)),
+    (('hack-days-markov', True), ('hack-days-markov-2', True)),
+]
 
 
 channels, channels_original, channels_fake = [], [], []

@@ -45,12 +45,28 @@ def process_message(event):
             return
 
     if dest_channel in settings.SLACK_CHANNEL_READONLY: #pro failsafe
-        return 
+        return
     slack.send_msg(
         username=input_username,
         channel=dest_channel,
         msg=markov_message,
     )
+
+
+def get_the_other_channel(channel):
+    for (c1, _), (c2, _) in settings.SLACK_CHANNELS:
+        if c1 == channel:
+            return c2
+        elif c2 == channel:
+            return c1
+
+
+def is_channel_writeable(channel):
+    for (c1, w1), (c2, w2) in settings.SLACK_CHANNELS:
+        if c1 == channel:
+            return w1
+        elif c2 == channel:
+            return w2
 
 
 def get_primary_channel(channel):
