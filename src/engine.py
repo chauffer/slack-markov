@@ -4,20 +4,53 @@ import time
 from . import slack, settings
 from .models import User, Message, me
 
+from .markov import Markov 
 
 logger = logging.getLogger(__name__)
 
 
 def process_message(event):
     msg = Message.from_event(event)
+    print('1')
+    if msg.user == me:  # ignoring messages coming from me
+        return
+    print('2')
 
-    if msg.user == me:
-        # ignoring messages coming from me
+    channel = msg.channel.name
+
+    if channel not in settings.channels:
+        return
+    print('3')
+    input_message = str(msg.text)
+    channels = find_the_other_channel(channel)
+    print(channels)
+    markov = Markov(channels['original_id'])
+    markov.learn(input_message)
+
+    message = markov.speak(input_message)
+    print('4')
+    if not message:
+        print('no message...')
         return
 
-    # TODO, e.g.
-    # msg.user.send_msg(...)
+    print(message)
 
+
+def find_the_other_channel(channel):
+    channels_fake, channels_original = settings.channels_fake, settings.channels_original
+
+    if channel in channels_fake:
+        other_channel = channels_original[channels_fake.index(channel)]
+        channels = {'original': other_channel, 'fake': channel, 'other': other_channel}
+    
+    if channel in channels_original:
+        other_channel = channels_fake[channels_original.index(channel)]
+        channels = {'original': channel, 'fake': other_channel, 'other': other_channel}
+
+    channels['original_id'] = slack.get_channel_from_channel_name(channels['original'])['id']
+    channels['fake_id'] = slack.get_channel_from_channel_name(channels['fake'])['id']
+
+    return channels
 
 # we might not need this
 def process_presence_change(event):
@@ -32,11 +65,7 @@ def process(event):
         return
 
     logger.debug('Processing %s' % event)
-
-    if event['type'] == 'presence_change':
-        process_presence_change(event)
-
-    elif event['type'] == 'message':
+    if event['type'] == 'message':
         if not event.get('subtype', None): #original message, edits etc have subtypes
             process_message(event)
 
