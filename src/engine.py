@@ -13,7 +13,7 @@ def process_message(event):
     if msg.user == me:
         # ignoring messages coming from me
         return
-
+    
     # TODO, e.g.
     # msg.user.send_msg(...)
 

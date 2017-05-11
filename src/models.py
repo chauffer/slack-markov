@@ -168,4 +168,4 @@ class Message(SlackAbstract):
 
 def init():
     global me
-    me = User.from_id(settings.BOT_ID)
+    me = User.from_id(settings.SLACK_BOT_ID)
