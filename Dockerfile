@@ -3,9 +3,10 @@ FROM python:3-alpine
 WORKDIR /app
 COPY requirements.txt /app
 
-RUN apk --no-cache add --virtual=.build-deps gcc build-base musl-dev &&\
-    pip install --no-cache-dir -r requirements.txt && \
-    apk del .build-deps
+RUN apk --no-cache --virtual=.build-deps add build-base musl-dev git &&\
+    mkdir -p /dependencies && cd /dependencies &&\
+    pip install --no-cache-dir -r /app/requirements.txt &&\
+    apk --purge del .build-deps
 
 COPY . /app
 
