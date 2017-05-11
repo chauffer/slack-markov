@@ -21,7 +21,7 @@ def get_user_info(user_id):
     return api_call('users.info', user=user_id)['user']
 
 
-def send_msg(msg, dest=None, user=None, channel=None):
+def send_msg(msg, username, dest=None, user=None, channel=None):
     if user:
         dest = '@%s' % user
     elif channel:
@@ -35,7 +35,7 @@ def send_msg(msg, dest=None, user=None, channel=None):
 
     logger.info('Sending to %s: %s' % (dest, msg))
     return api_call('chat.postMessage', channel=dest, text=str(msg),
-                    as_user=True)
+                    username=username, as_user=False)
 
 
 def add_reaction(emoji, chan_id=None, ts=None, _dest=None):
